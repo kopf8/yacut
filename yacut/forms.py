@@ -15,7 +15,7 @@ class URLForm(FlaskForm):
                    Constants.ORIG_URL_MAX_LEN,
                    message=Messages.ORIG_URL_LEN),
             URL(message=Messages.ORIG_URL_FORMAT)
-    ),
+        ),
         description='Введите оригинальную длинную ссылку'
     )
     custom_id = StringField(
