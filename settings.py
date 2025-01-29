@@ -28,8 +28,8 @@ class Messages(object):
     ORIG_URL_LEN = (f'Длина ссылки от {Constants.ORIG_URL_MIN_LEN} '
                     f'и до {Constants.ORIG_URL_MAX_LEN} знаков')
     ORIG_URL_FORMAT = 'Ссылка должна быть в формате URL'
-    SHORT_URL_NOT_UNIQUE = (f'Предложенный вариант короткой ссылки'
-                            f' уже существует.')
+    SHORT_URL_NOT_UNIQUE = ('Предложенный вариант короткой ссылки'
+                            ' уже существует.')
     SHORT_URL_LEN = (f'Длина должна быть от {Constants.SHORT_URL_MIN_LEN} '
                      f'и до {Constants.SHORT_URL_MAX_LEN} знаков')
     SHORT_URL_FORMAT = 'Допустимы только латинские символы и цифры'
