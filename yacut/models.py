@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from settings import Constants
-
 from yacut import db
 
 

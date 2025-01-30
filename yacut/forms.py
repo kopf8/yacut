@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from settings import Constants, Messages
 from wtforms import StringField, SubmitField, URLField
 from wtforms.validators import URL, DataRequired, Length, Optional, Regexp
 
 from .validators import UniqueCustomId
+from settings import Constants, Messages
 
 
 class URLForm(FlaskForm):

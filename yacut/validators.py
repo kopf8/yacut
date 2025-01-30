@@ -1,10 +1,10 @@
 import re
 from urllib.parse import urlparse
 
-from settings import Constants, Messages
 from wtforms.validators import ValidationError
 
 from .models import URLMap
+from settings import Constants, Messages
 
 
 class UniqueCustomId:
@@ -24,4 +24,4 @@ def is_valid_url(url):
 
 
 def is_valid_custom_id(custom_id):
-    return bool(re.match(Constants.SHORT_URL_FORMAT, custom_id))
+    return re.match(Constants.SHORT_URL_FORMAT, custom_id)

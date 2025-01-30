@@ -1,12 +1,12 @@
 from http import HTTPStatus
 
 from flask import abort, flash, redirect, render_template
-from settings import Messages
 
 from . import app, db
 from .forms import URLForm
 from .models import URLMap
 from .utils import get_full_short_url, get_unique_short_id
+from settings import Messages
 
 
 @app.route('/', methods=('GET', 'POST'))
