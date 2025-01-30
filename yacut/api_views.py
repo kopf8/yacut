@@ -4,8 +4,9 @@ from flask import jsonify, request
 
 from . import app, db
 from .error_handlers import InvalidAPIUsage
-from .exceptions import MissingBodyError, MissingUrlError, IncorrectUrlFormatError, BadCustomIdError, \
-    DuplicatedShortIdError
+from .exceptions import (MissingBodyError, MissingUrlError,
+                         IncorrectUrlFormatError, BadCustomIdError,
+                         DuplicatedShortIdError)
 from .models import URLMap
 from .utils import get_full_short_url, process_data
 from settings import Messages

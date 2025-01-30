@@ -3,8 +3,9 @@ from random import choice
 
 from flask import url_for, jsonify
 
-from .exceptions import MissingBodyError, MissingUrlError, IncorrectUrlFormatError, BadCustomIdError, \
-    DuplicatedShortIdError
+from .exceptions import (MissingBodyError, MissingUrlError,
+                         IncorrectUrlFormatError, BadCustomIdError,
+                         DuplicatedShortIdError)
 from .validators import is_valid_custom_id, is_valid_url
 from settings import Constants
 from yacut.models import URLMap
