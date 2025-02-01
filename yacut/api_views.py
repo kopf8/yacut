@@ -2,13 +2,14 @@ from http import HTTPStatus
 
 from flask import jsonify, request
 
-from . import app, db
+from . import app
 from .error_handlers import InvalidAPIUsage
 from .exceptions import (MissingBodyError, MissingUrlError,
                          IncorrectUrlFormatError, BadCustomIdError,
                          DuplicatedShortIdError)
 from .models import URLMap
-from .utils import get_full_short_url, process_data
+from .utils import (get_full_short_url, short_link_exists,
+                    process_data, save_data)
 from settings import Messages
 
 
@@ -19,8 +20,7 @@ def create_id():
         process_data(data)
         url_map = URLMap()
         url_map.from_dict(data)
-        db.session.add(url_map)
-        db.session.commit()
+        save_data(url_map)
         response_data = url_map.to_dict()
         response_data['short_link'] = get_full_short_url(
             response_data['short_link']
@@ -41,8 +41,8 @@ def create_id():
 
 @app.route('/api/id/<string:short_id>/', methods=('GET',))
 def get_original(short_id):
-    url_map = URLMap.query.filter_by(short=short_id).first()
-    if url_map is None:
+    url_map = short_link_exists(short_id)
+    if not url_map:
         raise InvalidAPIUsage(
             Messages.API_SHORT_ID_NOT_FOUND,
             HTTPStatus.NOT_FOUND
