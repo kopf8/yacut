@@ -11,6 +11,7 @@ class Config(object):
 
 
 class Constants(object):
+    LOCALHOST = 'http://localhost/'
     ORIG_URL_MIN_LEN = 3
     ORIG_URL_MAX_LEN = 2000
     ORIG_URL_STR_LEN = 6

@@ -19,7 +19,7 @@ class URLMap(db.Model):
     def to_dict(self):
         return dict(
             url=self.original,
-            short_link=self.short
+            short_link=Constants.LOCALHOST + self.short
         )
 
     def from_dict(self, data):
