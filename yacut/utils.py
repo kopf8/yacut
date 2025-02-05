@@ -54,7 +54,9 @@ def process_data(data):
     ):
         raise DuplicatedShortIdError
     if orig_link_exists(data['url']):
-        return jsonify(orig_link_exists(data['url']).to_dict()), HTTPStatus.CREATED
+        return jsonify(
+            orig_link_exists(data['url']).to_dict()
+        ), HTTPStatus.CREATED
     if 'custom_id' not in data or data['custom_id'] in (None, ''):
         data['custom_id'] = get_unique_short_id()
 
@@ -66,6 +68,46 @@ def save_data(obj):
 
 def redirect_short(short):
     return short_link_exists(short)
+
+
+def check_custom_id(data):
+    if data.custom_id.data:
+        short = data.custom_id.data
+    else:
+        short = get_unique_short_id()
+    return short
+
+
+def validate_process_form(context_data):
+    if (
+        context_data.validate_on_submit() and
+        orig_link_exists(context_data.original_link.data)
+    ):
+        url_map = orig_link_exists(context_data.original_link.data)
+        message = get_full_short_url(url_map.short)
+        flash(message=message)
+        return render_template('index.html', form=context_data)
+
+    if (
+        context_data.validate_on_submit() and
+        context_data.custom_id.data and
+        short_link_exists(context_data.custom_id.data)
+    ):
+        message = Messages.SHORT_URL_NOT_UNIQUE
+        flash(message=message)
+        return
+
+    if context_data.validate_on_submit():
+        short = check_custom_id(context_data)
+        url_map = URLMap(
+            original=context_data.original_link.data,
+            short=short
+        )
+        save_data(url_map)
+        message = get_full_short_url(short)
+        flash(message=message)
+        context_data.original_link.data = context_data.custom_id.data = ''
+    return render_template('index.html', form=context_data)
 
 
 def create_new_id(context_data):
@@ -90,36 +132,4 @@ def create_new_id(context_data):
         except DuplicatedShortIdError:
             raise InvalidAPIUsage(message=Messages.SHORT_URL_NOT_UNIQUE)
 
-    else:
-        if (
-            context_data.validate_on_submit() and
-            orig_link_exists(context_data.original_link.data)
-        ):
-            url_map = orig_link_exists(context_data.original_link.data)
-            message = get_full_short_url(url_map.short)
-            flash(message=message)
-            return render_template('index.html', form=context_data)
-
-        if (
-            context_data.validate_on_submit() and
-            context_data.custom_id.data and
-            short_link_exists(context_data.custom_id.data)
-        ):
-            message = Messages.SHORT_URL_NOT_UNIQUE
-            flash(message=message)
-            return
-
-        if context_data.validate_on_submit():
-            if context_data.custom_id.data:
-                short = context_data.custom_id.data
-            else:
-                short = get_unique_short_id()
-            url_map = URLMap(
-                original=context_data.original_link.data,
-                short=short
-            )
-            save_data(url_map)
-            message = get_full_short_url(short)
-            flash(message=message)
-            context_data.original_link.data = context_data.custom_id.data = ''
-        return render_template('index.html', form=context_data)
+    return validate_process_form(context_data)
