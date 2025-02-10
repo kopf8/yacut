@@ -1,16 +1,21 @@
 from http import HTTPStatus
 
-from flask import abort, redirect
+from flask import abort, redirect, render_template
 
 from . import app
 from .forms import URLForm
-from .utils import redirect_short, create_new_id
+from .utils import create_new_id, redirect_short
 
 
 @app.route('/', methods=('GET', 'POST'))
 def index_view():
     form = URLForm()
-    return create_new_id(form)
+    if not form.validate_on_submit():
+        return render_template('index.html', form=form)
+    context = create_new_id({'original_link': form.original_link.data, 'custom_id': form.custom_id.data})
+    form.original_link.data = context['original_link']
+    form.custom_id.data = context['custom_id']
+    return render_template('index.html', form=form)
 
 
 @app.route('/<string:short>', methods=('GET',))
