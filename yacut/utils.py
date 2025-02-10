@@ -85,8 +85,10 @@ def validate_process_form(context_data):
         flash(message=message)
         return context_data
 
-    if (context_data['custom_id'] and
-        short_link_exists(context_data['custom_id'])):
+    if (
+        context_data['custom_id'] and
+        short_link_exists(context_data['custom_id'])
+    ):
         message = Messages.SHORT_URL_NOT_UNIQUE
         flash(message=message)
         return

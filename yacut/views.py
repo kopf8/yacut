@@ -12,7 +12,10 @@ def index_view():
     form = URLForm()
     if not form.validate_on_submit():
         return render_template('index.html', form=form)
-    context = create_new_id({'original_link': form.original_link.data, 'custom_id': form.custom_id.data})
+    context = create_new_id(
+        {'original_link': form.original_link.data,
+         'custom_id': form.custom_id.data}
+    )
     form.original_link.data = context['original_link']
     form.custom_id.data = context['custom_id']
     return render_template('index.html', form=form)
